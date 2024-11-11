@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <title>Login Page</title>
+</head>
+<body>
+    <div class="container" id="container">
+        <div class="form-container sign-up">
+            <form id="signUpForm">
+                <h1>Create Account</h1>
+                <div class="social-icons">
+                    <a href="#" class="icon" aria-label="Sign up with Google"><i class="fa-brands fa-google-plus-g"></i></a>
+                    <a href="#" class="icon" aria-label="Sign up with Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="#" class="icon" aria-label="Sign up with GitHub"><i class="fa-brands fa-github"></i></a>
+                    <a href="#" class="icon" aria-label="Sign up with LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+                </div>
+                <span>or use your email for registration</span>
+                <input type="text" placeholder="Name" required aria-label="Name">
+                <input type="email" placeholder="Email" required aria-label="Email">
+                <input type="password" placeholder="Password" required aria-label="Password">
+                <button type="submit">Sign Up</button>
+            </form>
+        </div>
+        <div class="form-container sign-in">
+            <form id="signInForm">
+                <h1>Sign In</h1>
+                <div class="social-icons">
+                    <a href="#" class="icon" aria-label="Sign in with Google"><i class="fa-brands fa-google-plus-g"></i></a>
+                    <a href="#" class="icon" aria-label="Sign in with Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="#" class="icon" aria-label="Sign in with GitHub"><i class="fa-brands fa-github"></i></a>
+                    <a href="#" class="icon" aria-label="Sign in with LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+                </div>
+                <span>or use your email account</span>
+                <input type="email" placeholder="Email" required aria-label="Email">
+                <input type="password" placeholder="Password" required aria-label="Password">
+                <a href="#">Forgot Your Password?</a>
+                <button type="submit">Sign In</button>
+            </form>
+        </div>
+        <div class="toggle-container">
+            <div class="toggle">
+                <div class="toggle-panel toggle-left">
+                    <h1>Welcome Back!</h1>
+                    <p>Enter your personal details to use all of site features</p>
+                    <button class="hidden" id="login" aria-label="Sign In">Sign In</button>
+                </div>
+                <div class="toggle-panel toggle-right">
+                    <h1>Hello, Friend!</h1>
+                    <p>Register with your personal details to use all of site features</p>
+                    <button class="hidden" id="register" aria-label="Sign Up">Sign Up</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <script type="module">
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
+  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyDPY9QKQGyL4hLhKypkvp6hwC5t-2OLkgc",
+  authDomain: "finance-base-babd1.firebaseapp.com",
+  projectId: "finance-base-babd1",
+  storageBucket: "finance-base-babd1.appspot.com",
+  messagingSenderId: "1057060363407",
+  appId: "1:1057060363407:web:fe148251f219543e42a4fa",
+  measurementId: "G-LKD7MX7NKK"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+const auth = getAuth();
+
+document.addEventListener('DOMContentLoaded', (event) => {
+    // Select login form and signup form
+    const loginForm = document.getElementById('signInForm');
+    const signupForm = document.getElementById('signUpForm');
+
+    // Handle new registration
+    signupForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const email = signupForm.querySelector('input[placeholder="Email"]').value;
+        const password = signupForm.querySelector('input[placeholder="Password"]').value;
+
+        createUserWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+                const user = userCredential.user;
+                console.log('Registration successful:', user);
+                alert("Registration successful!");
+                window.location.href = 'login.html';
+            })
+            .catch((error) => {
+                console.error('Registration error:', error);
+                alert(`Registration failed: ${error.message}`);
+            });
+    });
+
+    // Handle login
+    loginForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const email = loginForm.querySelector('input[placeholder="Email"]').value;
+        const password = loginForm.querySelector('input[placeholder="Password"]').value;
+
+        signInWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+                const user = userCredential.user;
+                console.log('Login successful:', user);
+                alert(`${user.email} logged in successfully!`);
+                window.location.href = 'loginAfter.html';
+            })
+            .catch((error) => {
+                console.error('Login error:', error);
+                alert(`Login failed: ${error.message}`);
+            });
+    });
+});
+
+    </script>
+    <script>const container = document.getElementById('container');
+        const registerBtn = document.getElementById('register');
+        const loginBtn = document.getElementById('login');
+        
+        registerBtn.addEventListener('click', () => {
+            container.classList.add("active");
+        });
+        
+        loginBtn.addEventListener('click', () => {
+            container.classList.remove("active");
+        });
+        
+        // Email format validation function
+        const isValidEmail = (email) => {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(String(email).toLowerCase());
+        }
+        
+        // Password strength validation function
+        const isValidPassword = (password) => {
+            // Example: At least 8 characters long and contain at least one number and one special character
+            const re = /^(?=.*[0-9])(?=.*[!@#$%^&*])[A-Za-z0-9!@#$%^&*]{8,}$/;
+            return re.test(String(password));
+        }
+        
+        // Show error message function
+        const showError = (element, message) => {
+            const errorElement = document.createElement('div');
+            errorElement.className = 'error-message';
+            errorElement.innerText = message;
+            element.parentElement.appendChild(errorElement);
+        }
+        
+        // Remove all error messages
+        const clearErrors = (form) => {
+            const errors = form.querySelectorAll('.error-message');
+            errors.forEach(error => error.remove());
+        }
+        
+        // Form validation for Sign Up form
+        document.getElementById('signUpForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            clearErrors(this);
+            
+            const name = this.querySelector('input[placeholder="Name"]').value;
+            const email = this.querySelector('input[placeholder="Email"]').value;
+            const password = this.querySelector('input[placeholder="Password"]').value;
+            let isValid = true;
+        
+            if (!name) {
+                showError(this.querySelector('input[placeholder="Name"]'), 'Name is required');
+                isValid = false;
+            }
+        
+            if (!email || !isValidEmail(email)) {
+                showError(this.querySelector('input[placeholder="Email"]'), 'Valid email is required');
+                isValid = false;
+            }
+        
+            if (!password || !isValidPassword(password)) {
+                showError(this.querySelector('input[placeholder="Password"]'), 'Password must be at least 8 characters long and contain at least one number and one special character');
+                isValid = false;
+            }
+        
+            if (isValid) {
+                // Submit form or perform other actions
+                console.log('Sign Up Form Submitted:', { name, email, password });
+            }
+        });
+        
+        // Form validation for Sign In form
+        document.getElementById('signInForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            clearErrors(this);
+            
+            const email = this.querySelector('input[placeholder="Email"]').value;
+            const password = this.querySelector('input[placeholder="Password"]').value;
+            let isValid = true;
+        
+            if (!email || !isValidEmail(email)) {
+                showError(this.querySelector('input[placeholder="Email"]'), 'Valid email is required');
+                isValid = false;
+            }
+        
+            if (!password) {
+                showError(this.querySelector('input[placeholder="Password"]'), 'Password is required');
+                isValid = false;
+            }
+        
+            if (isValid) {
+                // Submit form or perform other actions
+                console.log('Sign In Form Submitted:', { email, password });
+            }
+        });
+        
+        // Real-time feedback for Sign Up form
+        document.getElementById('signUpForm').querySelector('input[placeholder="Email"]').addEventListener('input', function() {
+            clearErrors(this.form);
+            if (!isValidEmail(this.value)) {
+                showError(this, 'Valid email is required');
+            }
+        });
+        
+        document.getElementById('signUpForm').querySelector('input[placeholder="Password"]').addEventListener('input', function() {
+            clearErrors(this.form);
+            if (!isValidPassword(this.value)) {
+                showError(this, 'Password must be at least 8 characters long and contain at least one number and one special character');
+            }
+        });
+        
+        // Real-time feedback for Sign In form
+        document.getElementById('signInForm').querySelector('input[placeholder="Email"]').addEventListener('input', function() {
+            clearErrors(this.form);
+            if (!isValidEmail(this.value)) {
+                showError(this, 'Valid email is required');
+            }
+        });
+        
+        document.getElementById('signInForm').querySelector('input[placeholder="Password"]').addEventListener('input', function() {
+            clearErrors(this.form);
+            if (!this.value) {
+                showError(this, 'Password is required');
+            }
+        });
+        </script>
+</body>
+</html>

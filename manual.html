@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Budget Handling System</title>
+    <!-- <link rel="stylesheet" href="styles.css"> -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
+
+
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            padding: 20px;
+            background-color: #ea0e0e;
+            background: linear-gradient(to top, #d26c0c, #efe8cd);
+
+        }
+
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+        }
+
+        h1, h2, h3 {
+            color: #333;
+            text-align: center;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section-header {
+            background: #f4f4f4;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        .section-content {
+            padding: 20px;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .input-group {
+            margin-bottom: 10px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .input-group input[type="text"],
+        .input-group input[type="number"],
+        .input-group textarea {
+            width: 100%;
+            padding: 8px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .input-group button {
+            padding: 8px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .result {
+            margin-top: 10px;
+            padding: 10px;
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Budget Handling System</h1>
+        
+        <!-- Income Tracking Section -->
+        <div class="section">
+            <div class="section-header">
+                <h2>Income Tracking</h2>
+            </div>
+            <div class="section-content">
+                <div class="input-group">
+                    <label for="income-source">Income Source:</label>
+                    <input type="text" id="income-source" placeholder="Enter income source">
+                </div>
+                <div class="input-group">
+                    <label for="income-amount">Amount:</label>
+                    <input type="number" id="income-amount" placeholder="Enter amount">
+                </div>
+                <div class="input-group">
+                    <button onclick="trackIncome()">Add Income</button>
+                </div>
+                <div id="income-results" class="result"></div>
+            </div>
+        </div>
+        
+        <!-- Expense Tracking Section -->
+        <div class="section">
+            <div class="section-header">
+                <h2>Expense Tracking</h2>
+            </div>
+            <div class="section-content">
+                <div class="input-group">
+                    <label for="expense-category">Expense Category:</label>
+                    <input type="text" id="expense-category" placeholder="Enter expense category">
+                </div>
+                <div class="input-group">
+                    <label for="expense-amount">Amount:</label>
+                    <input type="number" id="expense-amount" placeholder="Enter amount">
+                </div>
+                <div class="input-group">
+                    <button onclick="trackExpense()">Add Expense</button>
+                </div>
+                <div id="expense-results" class="result"></div>
+            </div>
+        </div>
+        
+        <!-- Investment Tracking Section -->
+        <div class="section">
+            <div class="section-header">
+                <h2>Investment Tracking</h2>
+            </div>
+            <div class="section-content">
+                <div class="input-group">
+                    <label for="investment-type">Investment Type:</label>
+                    <input type="text" id="investment-type" placeholder="Enter investment type">
+                </div>
+                <div class="input-group">
+                    <label for="investment-amount">Amount:</label>
+                    <input type="number" id="investment-amount" placeholder="Enter amount">
+                </div>
+                <div class="input-group">
+                    <button onclick="trackInvestment()">Add Investment</button>
+                </div>
+                <div id="investment-results" class="result"></div>
+            </div>
+        </div>
+        
+        <!-- Personalized Financial Advice Section -->
+        <div class="section">
+            <div class="section-header">
+                <h2>Personalized Financial Advice</h2>
+            </div>
+            <div class="section-content">
+                <p>Here you can provide personalized financial advice based on the user's inputs and financial data.</p>
+                <textarea id="advice" rows="4" placeholder="Your personalized advice will appear here"></textarea>
+            </div>
+        </div>
+        
+    </div>
+    
+    <script>
+        // Define arrays to store tracked data
+let incomes = [];
+let expenses = [];
+let investments = [];
+
+function trackIncome() {
+    const source = document.getElementById('income-source').value;
+    const amount = parseFloat(document.getElementById('income-amount').value);
+    
+    // Validate input
+    if (source && !isNaN(amount)) {
+        // Add income to the array
+        incomes.push({ source: source, amount: amount });
+        
+        // Display results
+        updateIncomeResults();
+        
+        // Clear input fields
+        document.getElementById('income-source').value = '';
+        document.getElementById('income-amount').value = '';
+    } else {
+        alert('Please enter valid income source and amount.');
+    }
+}
+
+function trackExpense() {
+    const category = document.getElementById('expense-category').value;
+    const amount = parseFloat(document.getElementById('expense-amount').value);
+    
+    // Validate input
+    if (category && !isNaN(amount)) {
+        // Add expense to the array
+        expenses.push({ category: category, amount: amount });
+        
+        // Display results
+        updateExpenseResults();
+        
+        // Clear input fields
+        document.getElementById('expense-category').value = '';
+        document.getElementById('expense-amount').value = '';
+    } else {
+        alert('Please enter valid expense category and amount.');
+    }
+}
+
+function trackInvestment() {
+    const type = document.getElementById('investment-type').value;
+    const amount = parseFloat(document.getElementById('investment-amount').value);
+    
+    // Validate input
+    if (type && !isNaN(amount)) {
+        // Add investment to the array
+        investments.push({ type: type, amount: amount });
+        
+        // Display results
+        updateInvestmentResults();
+        
+        // Clear input fields
+        document.getElementById('investment-type').value = '';
+        document.getElementById('investment-amount').value = '';
+    } else {
+        alert('Please enter valid investment type and amount.');
+    }
+}
+
+function updateIncomeResults() {
+    let html = '';
+    incomes.forEach(income => {
+        html += `<p><strong>Source:</strong> ${income.source}<br><strong>Amount:</strong> ${income.amount}</p>`;
+    });
+    document.getElementById('income-results').innerHTML = html;
+}
+
+function updateExpenseResults() {
+    let html = '';
+    expenses.forEach(expense => {
+        html += `<p><strong>Category:</strong> ${expense.category}<br><strong>Amount:</strong> ${expense.amount}</p>`;
+    });
+    document.getElementById('expense-results').innerHTML = html;
+}
+
+function updateInvestmentResults() {
+    let html = '';
+    investments.forEach(investment => {
+        html += `<p><strong>Type:</strong> ${investment.type}<br><strong>Amount:</strong> ${investment.amount}</p>`;
+    });
+    document.getElementById('investment-results').innerHTML = html;
+}
+
+    </script>
+</body>
+</html>
